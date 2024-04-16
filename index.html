@@ -71,7 +71,7 @@ async function initiateSSOFlow() {
      '&code_verifier=' + encodeURIComponent(codeVerifier);
 
 //-- Redirect the Browser --//
-    window.location = redirectURL;
+    window.location.href = redirectURL;
 }
 
     
