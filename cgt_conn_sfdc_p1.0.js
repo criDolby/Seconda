@@ -107,7 +107,7 @@ function getUserInfo(accessToken, expDomain) {
             //User Info response
             console.log(client.response);
             userArr = JSON.parse(client.response)
-            if(userArr.custom_attributes.utentePortale === null){
+            if(userArr.custom_attributes.flag_portale === null){
                 window.location = complProfiloComm;
             }
             localStorage.setItem("user", userArr);
