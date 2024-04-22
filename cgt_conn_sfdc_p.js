@@ -93,10 +93,11 @@ function getUserInfo(accessToken) {
         client.onreadystatechange = function() {
             if(this.readyState == 4) {
                 if (this.status == 200) {
+                  userArr = JSON.parse(client.response);
                   if(userArr.custom_attributes.flag_portale == 'false'){
                       window.location = complProfiloComm;
                   }else{
-                    resolve( userArr = JSON.parse(client.response));
+                    resolve( userArr );
                   } 
                 } else {
                     reject(
