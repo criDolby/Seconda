@@ -1,7 +1,7 @@
 <html>
 <head> 
-        <script src="./cgt_conn_sfdc_const_p1.0.js" ></script>
-        <script src="./cgt_conn_sfdc_p1.0.js"></script>
+        <script src="./cgt_conn_sfdc_const_p.js" ></script>
+        <script src="./cgt_conn_sfdc_p.js"></script>
         <title>Test Interno PORTALE CGT LOGIN</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     </head>
@@ -25,20 +25,23 @@
 //////////////////////////////////////////////////////////////////////
 //-- RENDER --//
 
-
 queryString = window.location.search;
 urlParams = new URLSearchParams(queryString);
-accToken = localStorage.getItem("accToken");
-console.log('access token after refresh: ' +accToken);
+accToken = getCookie("SFToken");
+console.log('acess token after refresh: ' +accToken);
+//console.log(document.cookie);
 // Controllo se è presente un access token
-if(accToken !== null ){
-    try {
-      getUserInfo(accToken);
-    } catch (error) {
-        accToken = null;
-        localStorage.removeItem("accToken");
-    }
-}else if(urlParams.get('code') !== null){
+if(accToken !== ""){
+      getUserInfo(accToken)
+      .then(function (result) {
+        document.getElementById("loginOk").innerText = result.name;
+        document.getElementById("buttonLogin").classList = "hidden";
+        document.getElementById("userOk").classList = "";
+      })
+      .catch(function (err) {
+        console.error('Augh, there was an error!', err.statusText);
+      });
+}else if(urlParams.get('code') !== null && accToken === ""){
     console.log(queryString);
     console.log('Loading Callback Params: ' + urlParams);
     //Create the Code Response from the URL params
@@ -47,7 +50,10 @@ if(accToken !== null ){
     codeResponse.state = urlParams.get('state');
     codeResponse.sfdc_community_url = urlParams.get('sfdc_community_url');
 // Call the common token exhcange method.
-    tokenExchange(codeResponse, localStorage.getItem("pkce_code_verifier"));
+    tokenExchange(codeResponse, localStorage.getItem("pkce_code_verifier"))
+    setTimeout(function () {
+      location.reload(true);
+    }, 2000);
 }
 
 </script>
